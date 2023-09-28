@@ -4,7 +4,7 @@ import app from "../../firebase/firebase.init";
 import { useState } from "react";
 
 const Login = () => {
-  const [user, setUser] = useState({});
+  const [user, setUser] = useState(null);
   const auth = getAuth(app);
   const provider = new GoogleAuthProvider();
 
@@ -12,7 +12,7 @@ const Login = () => {
     signInWithPopup(auth, provider)
       .then((result) => {
         const loggedUser = result.user;
-        console.log(loggedUser);
+        // console.log(loggedUser);
         setUser(loggedUser);
       })
       .catch((error) => {
@@ -23,13 +23,13 @@ const Login = () => {
   const handleGoogleLogOut = () => {
     signOut(auth)
       .then(() => {
-        setUser({});
+        setUser(null);
       })
       .catch((error) => {
         console.log(error);
       });
   };
-
+  console.log(user);
   return (
     <div className="flex flex-col justify-center items-center">
       <div>
@@ -55,7 +55,7 @@ const Login = () => {
           </div>
         )}
       </div>
-      {user && (
+      {user ? (
         <div>
           <button
             onClick={handleGoogleLogOut}
@@ -64,6 +64,8 @@ const Login = () => {
             Log out
           </button>
         </div>
+      ) : (
+        <p className="text-2xl font-semibold text-red-600">No user found!</p>
       )}
     </div>
   );
